@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { useQuery } from '@tanstack/react-query'
 import {
   IconBowl,
   IconBrain,
@@ -38,103 +39,148 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '~/components/ui/sidebar'
+import { getUserThreads } from '~/server/queries'
+import { useSession } from '~/lib/auth-client'
+import { atom, useAtom } from 'jotai'
+import { PageData, type NavMainChild } from '~/lib/data-interface'
 
-const data = {
-  user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
-  navMain: [
-    {
-      title: 'Chat',
-      url: '/',
-      icon: IconMessage,
+export const threadsAtom = atom<NavMainChild[]>()
+
+const getData = (threads) => {
+  console.debug(threads)
+  return {
+    user: {
+      name: 'shadcn',
+      email: 'm@example.com',
+      avatar: '/avatars/shadcn.jpg',
     },
-    {
-      title: 'Mindfulness',
-      url: '/mindfullness',
-      icon: IconBrain,
-    },
-    {
-      title: 'Comfort Foods',
-      url: '#',
-      icon: IconBowl,
-    },
-    {
-      title: 'Self-help',
-      url: '#',
-      icon: IconInfoHexagon,
-    },
-  ],
-  navClouds: [
-    {
-      title: 'Capture',
-      icon: IconCamera,
-      isActive: true,
-      url: '#',
-      items: [
-        {
-          title: 'Active Proposals',
-          url: '#',
-        },
-        {
-          title: 'Archived',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Proposal',
-      icon: IconFileDescription,
-      url: '#',
-      items: [
-        {
-          title: 'Active Proposals',
-          url: '#',
-        },
-        {
-          title: 'Archived',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Prompts',
-      icon: IconFileAi,
-      url: '#',
-      items: [
-        {
-          title: 'Active Proposals',
-          url: '#',
-        },
-        {
-          title: 'Archived',
-          url: '#',
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: 'Settings',
-      url: '#',
-      icon: IconSettings,
-    },
-    {
-      title: 'Get Help',
-      url: '#',
-      icon: IconHelp,
-    },
-    {
-      title: 'Search Chats',
-      url: '#',
-      icon: IconSearch,
-    },
-  ],
+    navMain: [
+      {
+        title: 'Chat',
+        url: '/',
+        icon: IconMessage,
+        items: threads
+          ? threads.map((thread) => {
+              console.table({
+                title: thread.title ?? '',
+                thread_id: thread.thread_id,
+              })
+              return {
+                title: thread.title ?? '',
+                thread_id: thread.id,
+              }
+            })
+          : [],
+      },
+      {
+        title: 'Mindfulness',
+        url: '/mindfullness',
+        icon: IconBrain,
+      },
+      {
+        title: 'Comfort Foods',
+        url: '#',
+        icon: IconBowl,
+      },
+      {
+        title: 'Self-help',
+        url: '#',
+        icon: IconInfoHexagon,
+      },
+    ],
+    navClouds: [
+      {
+        title: 'Capture',
+        icon: IconCamera,
+        isActive: true,
+        url: '#',
+        items: [
+          {
+            title: 'Active Proposals',
+            url: '#',
+          },
+          {
+            title: 'Archived',
+            url: '#',
+          },
+        ],
+      },
+      {
+        title: 'Proposal',
+        icon: IconFileDescription,
+        url: '#',
+        items: [
+          {
+            title: 'Active Proposals',
+            url: '#',
+          },
+          {
+            title: 'Archived',
+            url: '#',
+          },
+        ],
+      },
+      {
+        title: 'Prompts',
+        icon: IconFileAi,
+        url: '#',
+        items: [
+          {
+            title: 'Active Proposals',
+            url: '#',
+          },
+          {
+            title: 'Archived',
+            url: '#',
+          },
+        ],
+      },
+    ],
+    navSecondary: [
+      {
+        title: 'Settings',
+        url: '#',
+        icon: IconSettings,
+      },
+      {
+        title: 'Get Help',
+        url: '#',
+        icon: IconHelp,
+      },
+      {
+        title: 'Search Chats',
+        url: '#',
+        icon: IconSearch,
+      },
+    ],
+  }
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: session } = useSession()
+  const userId = session?.user?.id ?? ''
+  const query = useQuery({
+    queryKey: ['user-threads'],
+    queryFn: () => getUserThreads(userId),
+  })
+  const [threads, setThreads] = useAtom(threadsAtom)
+  React.useEffect(() => {
+    setThreads(
+      (_prev) =>
+        query.data?.map((thread) => {
+          return {
+            title: thread.title ?? '',
+            thread_id: thread.id,
+          }
+        }) as NavMainChild[],
+    )
+  }, [query.data])
+
+  if (query.isLoading) {
+    return <div>Loading...</div>
+  }
+  const data = getData(threads ?? [])
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -146,19 +192,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <a href="#">
                 <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+                <span className="text-base font-semibold">
+                  Lotus Valley GGN
+                </span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
-      </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter>
+      {data && (
+        <>
+          <SidebarContent>
+            <NavMain items={data.navMain} />
+            <NavSecondary items={data.navSecondary} className="mt-auto" />
+          </SidebarContent>
+          <SidebarFooter>
+            <NavUser user={data.user} />
+          </SidebarFooter>
+        </>
+      )}
     </Sidebar>
   )
 }

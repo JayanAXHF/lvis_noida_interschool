@@ -2,6 +2,8 @@ import '~/styles/globals.css'
 import { ThemeProvider } from '~/components/theme-provider'
 import { type Metadata } from 'next'
 import { Geist } from 'next/font/google'
+import { useQueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryProvider } from '~/components/query-provider'
 
 export const metadata: Metadata = {
   title: 'Create T3 App',
@@ -20,14 +22,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable}`}>
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   )

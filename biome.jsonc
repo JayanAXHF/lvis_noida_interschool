@@ -41,9 +41,5 @@
       "attributePosition": "auto",
       "bracketSpacing": true
     }
-  },
-  "assist": {
-    "enabled": null,
-    "actions": { "source": { "organizeImports": "on" } }
   }
 }

@@ -27,6 +27,17 @@ export const messages = createTable(
     updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
     user_id: d.varchar().notNull(),
     user_msg: d.boolean().notNull(),
+    thread_id: d.varchar().notNull(),
   }),
   (t) => [index('text_idx').on(t.text)],
 )
+export const threads = createTable('thread', (d) => ({
+  id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
+  title: d.varchar({ length: 4096 }),
+  createdAt: d
+    .timestamp({ withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+  user_id: d.varchar().notNull(),
+}))
