@@ -79,7 +79,7 @@ const getData = (threads) => {
       },
       {
         title: 'Comfort Foods',
-        url: '#',
+        url: '/cooking',
         icon: IconBowl,
       },
       {
