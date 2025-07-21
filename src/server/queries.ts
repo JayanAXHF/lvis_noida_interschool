@@ -5,8 +5,9 @@ import {
   threads as threadsSchema,
 } from './db/schema'
 import { auth } from '~/lib/auth'
-import { headers } from 'next/headers'
 import { eq } from 'drizzle-orm'
+import { getSession, useSession } from '~/lib/auth-client'
+import { headers } from 'next/headers'
 
 export const getUserThreads = async (userId: string) => {
   try {
@@ -21,7 +22,7 @@ export const getUserThreads = async (userId: string) => {
   }
 }
 
-export const getThreadMessages = async (threadId: string) => {
+export const getThreadMessages = async (threadId: number) => {
   try {
     const messages = await db
       .select()
@@ -57,6 +58,37 @@ export const addThread = async (userId: string, title: string) => {
       })
       .returning()
     return thread
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
+
+export const addMessage = async (
+  threadId: number,
+  message: string,
+  isUserMessage: boolean,
+) => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    })
+    if (!session) {
+      console.error('No session found')
+      return null
+    }
+    const userId = session?.user.id
+
+    const newMessage = await db
+      .insert(messagesSchema)
+      .values({
+        thread_id: String(threadId),
+        text: message,
+        user_msg: isUserMessage,
+        user_id: userId,
+      })
+      .returning()
+    return newMessage
   } catch (error) {
     console.error(error)
     return null

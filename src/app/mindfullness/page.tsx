@@ -3,6 +3,7 @@ import { AppSidebar } from '~/components/app-sidebar'
 import { ChartAreaInteractive } from '~/components/chart-area-interactive'
 import { DataTable } from '~/components/data-table'
 import { SectionCards } from '~/components/section-cards'
+import { CircularTimer } from '~/components/circular-timer'
 import { SiteHeader } from '~/components/site-header'
 import { SidebarInset, SidebarProvider } from '~/components/ui/sidebar'
 import data from '~/app/dashboard/data.json'
@@ -20,9 +21,11 @@ export default function HomePage() {
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
-        <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6"></div>
+        <div className="flex flex-1 flex-col size-full">
+          <div className="@container/main flex flex-1 flex-col gap-2 size-full">
+            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 size-full items-center justify-center">
+              <CircularTimer />
+            </div>
           </div>
         </div>
       </SidebarInset>

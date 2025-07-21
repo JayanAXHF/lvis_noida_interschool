@@ -4,6 +4,7 @@ import { type Metadata } from 'next'
 import { Geist } from 'next/font/google'
 import { useQueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { QueryProvider } from '~/components/query-provider'
+import { Toaster } from 'sonner'
 
 export const metadata: Metadata = {
   title: 'Create T3 App',
@@ -29,6 +30,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <Toaster />
             {children}
           </ThemeProvider>
         </QueryProvider>

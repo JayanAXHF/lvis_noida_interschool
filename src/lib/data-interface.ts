@@ -43,3 +43,13 @@ export interface PageData {
   navClouds: NavCloudsItem[]
   navSecondary: NavSecondaryItem[]
 }
+
+export interface Message {
+  id: number
+  text: string | null
+  createdAt: Date
+  updatedAt: Date | null
+  user_id: string
+  user_msg: boolean
+  thread_id: string
+}
