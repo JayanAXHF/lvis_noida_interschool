@@ -145,7 +145,7 @@ export function NavMain({
                             }}
                             className="cursor-pointer"
                           >
-                            <span>{thread.title}</span>
+                            <Link href={item.url}>{thread.title}</Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSub>
                       )

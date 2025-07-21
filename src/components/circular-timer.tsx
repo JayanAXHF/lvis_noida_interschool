@@ -17,24 +17,37 @@ interface CircularTimerProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const CircularTimer = React.forwardRef<HTMLDivElement, CircularTimerProps>(
-  ({ className, size = 300, strokeWidth = 15, ...props }, ref) => {
+  ({ className, size = 400, strokeWidth = 15, ...props }, ref) => {
     const [initialTime, setInitialTime] = React.useState(300)
     const [time, setTime] = React.useState(initialTime)
     const [isRunning, setIsRunning] = React.useState(false)
     const [otpValue, setOtpValue] = React.useState('')
+    const audioRef = React.useRef<HTMLAudioElement>(null)
 
     React.useEffect(() => {
       if (time === 0) {
         setIsRunning(false)
       }
-      if (!isRunning || time === 0) return
+      if (!isRunning || time === 0) {
+        if (audioRef.current) {
+          audioRef.current.pause()
+        }
+        return
+      }
       if (!/^(?:[01]\d|2[0-3])[0-5]\d$/.test(otpValue)) {
         setIsRunning(false)
         toast.error('Invalid Time Value')
       }
 
+      if (audioRef.current) {
+        audioRef.current.play()
+      }
       const interval = setInterval(() => {
         setTime((prevTime) => prevTime - 1)
+        setOtpValue(
+          String(Math.floor(time / 60)).padStart(2, '0') +
+            String((time - 1) % 60).padStart(2, '0'),
+        )
       }, 1000)
 
       return () => clearInterval(interval)
@@ -144,6 +157,10 @@ const CircularTimer = React.forwardRef<HTMLDivElement, CircularTimerProps>(
             Reset
           </Button>
         </div>
+        <audio
+          ref={audioRef}
+          src="/mindfulness-relaxation-amp-meditation-music-22174.mp3"
+        />
       </div>
     )
   },

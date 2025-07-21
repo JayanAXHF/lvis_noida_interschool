@@ -5,6 +5,7 @@ import { Geist } from 'next/font/google'
 import { useQueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { QueryProvider } from '~/components/query-provider'
 import { Toaster } from 'sonner'
+import { GlobalSearch } from '~/components/global_search'
 
 export const metadata: Metadata = {
   title: 'Create T3 App',
@@ -31,6 +32,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Toaster />
+            <GlobalSearch />
             {children}
           </ThemeProvider>
         </QueryProvider>

@@ -148,7 +148,7 @@ const getData = (threads) => {
         icon: IconHelp,
       },
       {
-        title: 'Search Chats',
+        title: 'Search Chats [⌘K]',
         url: '#',
         icon: IconSearch,
       },
