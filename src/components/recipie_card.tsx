@@ -51,7 +51,7 @@ export const RecipeCardModal = ({
   return (
     <Dialog>
       <DialogTrigger></DialogTrigger>
-			<RecipeDialogContent recipe={recipe} />
+      <RecipeDialogContent recipe={recipe} />
     </Dialog>
   )
 }

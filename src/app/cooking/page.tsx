@@ -68,9 +68,15 @@ const page = () => {
               Search Results
             </h1>
             <div className="h-full w-full grid grid-flow-row grid-cols-3 gap-5">
-              {searchResults && searchResults.map((item) => (
-								<RecipeCardModal recipe={item} key={item.id} isOpen={modalOpen} setIsOpen={setModalOpen} />
-							))}
+              {searchResults &&
+                searchResults.map((item) => (
+                  <RecipeCardModal
+                    recipe={item}
+                    key={item.id}
+                    isOpen={modalOpen}
+                    setIsOpen={setModalOpen}
+                  />
+                ))}
             </div>
           </div>
         </div>

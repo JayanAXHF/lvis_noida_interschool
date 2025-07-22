@@ -52,6 +52,17 @@ const CircularTimer = React.forwardRef<HTMLDivElement, CircularTimerProps>(
 
       return () => clearInterval(interval)
     }, [isRunning, time])
+    React.useEffect(() => {
+      const down = (e: KeyboardEvent) => {
+        if (e.keyCode === 13 && (e.metaKey || e.ctrlKey)) {
+          e.preventDefault()
+          setIsRunning((running) => !running)
+        }
+      }
+
+      document.addEventListener('keydown', down)
+      return () => document.removeEventListener('keydown', down)
+    })
 
     const radius = (size - strokeWidth) / 2
     const circumference = 2 * Math.PI * radius
@@ -125,6 +136,12 @@ const CircularTimer = React.forwardRef<HTMLDivElement, CircularTimerProps>(
               }
               onChange={handleTimeChange}
               disabled={isRunning}
+              onKeyDown={(e) => {
+                if (e.keyCode === 13 && (e.metaKey || e.ctrlKey)) {
+                  e.preventDefault()
+                  setIsRunning((running) => !running)
+                }
+              }}
             >
               <InputOTPGroup className="font-bold text-5xl tabular-nums">
                 <InputOTPSlot index={0} />
@@ -144,7 +161,9 @@ const CircularTimer = React.forwardRef<HTMLDivElement, CircularTimerProps>(
             className="w-32"
             onClick={() => setIsRunning(!isRunning)}
           >
-            {isRunning ? 'Pause' : 'Start'}
+            {isRunning ? 'Pause' : 'Start'} <kbd className="bg-muted-foreground text-muted-background pointer-events-none inline-flex h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none">
+          <span className="text-xs">⌘</span>Enter
+        </kbd>
           </Button>
           <Button
             size="lg"

@@ -1,4 +1,6 @@
+'use client'
 import Link from 'next/link'
+import { useEffect } from 'react'
 import data from '~/app/dashboard/data.json'
 import { AppSidebar } from '~/components/app-sidebar'
 import { ChartAreaInteractive } from '~/components/chart-area-interactive'

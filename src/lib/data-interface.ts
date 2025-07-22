@@ -32,7 +32,7 @@ export interface NavCloudsItem {
 }
 
 export interface NavSecondaryItem {
-  title: string
+  title: React.ReactNode
   url: string
   icon: ElementType
 }
