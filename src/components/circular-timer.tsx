@@ -1,15 +1,15 @@
 'use client'
 
 import * as React from 'react'
-import { cn } from '~/lib/utils'
+import { toast } from 'sonner'
 import { Button } from '~/components/ui/button'
 import {
   InputOTP,
   InputOTPGroup,
-  InputOTPSlot,
   InputOTPSeparator,
+  InputOTPSlot,
 } from '~/components/ui/input-otp'
-import { toast } from 'sonner'
+import { cn } from '~/lib/utils'
 
 interface CircularTimerProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: number
@@ -61,8 +61,14 @@ const CircularTimer = React.forwardRef<HTMLDivElement, CircularTimerProps>(
     const handleTimeChange = (value: string) => {
       if (/^\d{0,4}$/.test(value)) {
         setOtpValue(value)
-        const mins = Math.min(parseInt(value.substring(0, 2), 10) || 0, 59)
-        const secs = Math.min(parseInt(value.substring(2, 4), 10) || 0, 59)
+        const mins = Math.min(
+          Number.parseInt(value.substring(0, 2), 10) || 0,
+          59,
+        )
+        const secs = Math.min(
+          Number.parseInt(value.substring(2, 4), 10) || 0,
+          59,
+        )
         const totalSeconds = mins * 60 + secs
 
         if (!isNaN(totalSeconds)) {
@@ -104,7 +110,7 @@ const CircularTimer = React.forwardRef<HTMLDivElement, CircularTimerProps>(
               r={radius}
               cx={size / 2}
               cy={size / 2}
-              className="transform-gpu -rotate-90 origin-center transition-all duration-300"
+              className="-rotate-90 origin-center transform-gpu transition-all duration-300"
             />
           </svg>
           <div className="z-10">
@@ -120,7 +126,7 @@ const CircularTimer = React.forwardRef<HTMLDivElement, CircularTimerProps>(
               onChange={handleTimeChange}
               disabled={isRunning}
             >
-              <InputOTPGroup className="text-5xl font-bold tabular-nums">
+              <InputOTPGroup className="font-bold text-5xl tabular-nums">
                 <InputOTPSlot index={0} />
                 <InputOTPSlot index={1} />
               </InputOTPGroup>

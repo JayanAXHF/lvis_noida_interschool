@@ -1,6 +1,5 @@
 'use client'
 
-import * as React from 'react'
 import {
   Calculator,
   Calendar,
@@ -9,7 +8,12 @@ import {
   Smile,
   User,
 } from 'lucide-react'
+import * as React from 'react'
 
+import { useQuery } from '@tanstack/react-query'
+import { useAtom } from 'jotai'
+import { useRouter } from 'next/navigation'
+import { currentThreadAtom } from '~/app/page'
 import {
   CommandDialog,
   CommandEmpty,
@@ -20,12 +24,8 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from '~/components/ui/command'
-import { useQuery } from '@tanstack/react-query'
-import { getUserThreads } from '~/server/queries'
 import { useSession } from '~/lib/auth-client'
-import { useRouter } from 'next/navigation'
-import { currentThreadAtom } from '~/app/page'
-import { useAtom } from 'jotai'
+import { getUserThreads } from '~/server/queries'
 
 export function GlobalSearch() {
   const [open, setOpen] = React.useState(false)

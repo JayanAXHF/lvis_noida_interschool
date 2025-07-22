@@ -1,21 +1,21 @@
 'use client'
-import Link from 'next/link'
-import { AppSidebar } from '~/components/app-sidebar'
+import { useQuery } from '@tanstack/react-query'
 import { atom, useAtom } from 'jotai'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import data from '~/app/dashboard/data.json'
+import { AppSidebar } from '~/components/app-sidebar'
 import { ChartAreaInteractive } from '~/components/chart-area-interactive'
 import { DataTable } from '~/components/data-table'
 import { SectionCards } from '~/components/section-cards'
 import { SiteHeader } from '~/components/site-header'
-import { SidebarInset, SidebarProvider } from '~/components/ui/sidebar'
-import data from '~/app/dashboard/data.json'
+import { Button } from '~/components/ui/button'
 import { PlaceholdersAndVanishInput } from '~/components/ui/placeholders-and-vanish-input'
 import { ScrollArea } from '~/components/ui/scroll-area'
+import { SidebarInset, SidebarProvider } from '~/components/ui/sidebar'
 import { useSession } from '~/lib/auth-client'
-import { Button } from '~/components/ui/button'
-import { addMessage, getThread, getThreadMessages } from '~/server/queries'
-import { useQuery } from '@tanstack/react-query'
 import type { Message } from '~/lib/data-interface'
-import { useState, useEffect } from 'react'
+import { addMessage, getThread, getThreadMessages } from '~/server/queries'
 
 export const currentThreadAtom = atom(0)
 
@@ -39,7 +39,7 @@ export default function HomePage() {
   const thread = query.data ?? null
   if (!session) {
     return (
-      <div className="h-dvh w-dvw flex justify-center items-center">
+      <div className="flex h-dvh w-dvw items-center justify-center">
         <span className="flex flex-row gap-5">
           {' '}
           <Link href="/sign-in">
@@ -69,8 +69,8 @@ export default function HomePage() {
       <AppSidebar variant="inset" />
       <SidebarInset className="my-0 py-0">
         <SiteHeader title={thread?.title ?? ''} />
-        <div className="flex flex-col content-between max-h-full h-full max-w-3xl mx-auto w-full">
-          <div className="@container/main flex flex-1 flex-col gap-2 max-h-full">
+        <div className="mx-auto flex h-full max-h-full w-full max-w-3xl flex-col content-between">
+          <div className="@container/main flex max-h-full flex-1 flex-col gap-2">
             <ScrollArea className="overflow-y-auto">
               {messages.map((message) => (
                 <div
@@ -88,14 +88,14 @@ export default function HomePage() {
                   >
                     <p className="text-sm">{message.text}</p>
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     {new Date(message.createdAt).toLocaleTimeString()}
                   </p>
                 </div>
               ))}
             </ScrollArea>
           </div>
-          <div className="flex justify-end flex-col gap-2">
+          <div className="flex flex-col justify-end gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6">
               <PlaceholdersAndVanishInput
                 onChange={(e) => setMessage(e.target.value)}

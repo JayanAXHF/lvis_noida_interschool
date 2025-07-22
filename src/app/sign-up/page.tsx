@@ -1,5 +1,10 @@
 'use client'
 
+import { Loader2, X } from 'lucide-react'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
 import { Button } from '~/components/ui/button'
 import {
   Card,
@@ -11,12 +16,7 @@ import {
 } from '~/components/ui/card'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
-import { useState } from 'react'
-import Image from 'next/image'
-import { Loader2, X } from 'lucide-react'
 import { signUp } from '~/lib/auth-client'
-import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
 
 export default function SignUp() {
   const [firstName, setFirstName] = useState('')
@@ -42,8 +42,8 @@ export default function SignUp() {
   }
 
   return (
-    <div className="h-dvh w-dvw flex justify-center items-center">
-      <Card className="z-50 rounded-md rounded-t-none max-w-md">
+    <div className="flex h-dvh w-dvw items-center justify-center">
+      <Card className="z-50 max-w-md rounded-md rounded-t-none">
         <CardHeader>
           <CardTitle className="text-lg md:text-xl">Sign Up</CardTitle>
           <CardDescription className="text-xs md:text-sm">
@@ -117,7 +117,7 @@ export default function SignUp() {
               <Label htmlFor="image">Profile Image (optional)</Label>
               <div className="flex items-end gap-4">
                 {imagePreview && (
-                  <div className="relative w-16 h-16 rounded-sm overflow-hidden">
+                  <div className="relative h-16 w-16 overflow-hidden rounded-sm">
                     <Image
                       src={imagePreview}
                       alt="Profile preview"
@@ -126,7 +126,7 @@ export default function SignUp() {
                     />
                   </div>
                 )}
-                <div className="flex items-center gap-2 w-full">
+                <div className="flex w-full items-center gap-2">
                   <Input
                     id="image"
                     type="file"
@@ -183,8 +183,8 @@ export default function SignUp() {
           </div>
         </CardContent>
         <CardFooter>
-          <div className="flex justify-center w-full border-t py-4">
-            <p className="text-center text-xs text-neutral-500">
+          <div className="flex w-full justify-center border-t py-4">
+            <p className="text-center text-neutral-500 text-xs">
               Secured by <span className="text-orange-400">better-auth.</span>
             </p>
           </div>

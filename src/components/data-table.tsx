@@ -1,21 +1,20 @@
 'use client'
 
-import * as React from 'react'
 import {
-  closestCenter,
   DndContext,
+  type DragEndEvent,
   KeyboardSensor,
   MouseSensor,
   TouchSensor,
+  type UniqueIdentifier,
+  closestCenter,
   useSensor,
   useSensors,
-  type DragEndEvent,
-  type UniqueIdentifier,
 } from '@dnd-kit/core'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import {
-  arrayMove,
   SortableContext,
+  arrayMove,
   useSortable,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
@@ -35,8 +34,11 @@ import {
   IconTrendingUp,
 } from '@tabler/icons-react'
 import {
-  ColumnDef,
-  ColumnFiltersState,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type Row,
+  type SortingState,
+  type VisibilityState,
   flexRender,
   getCoreRowModel,
   getFacetedRowModel,
@@ -44,20 +46,17 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  Row,
-  SortingState,
   useReactTable,
-  VisibilityState,
 } from '@tanstack/react-table'
+import * as React from 'react'
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { useIsMobile } from '~/hooks/use-mobile'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
 import {
-  ChartConfig,
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -100,6 +99,7 @@ import {
   TableRow,
 } from '~/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
+import { useIsMobile } from '~/hooks/use-mobile'
 
 export const schema = z.object({
   id: z.number(),
@@ -123,9 +123,9 @@ function DragHandle({ id }: { id: number }) {
       {...listeners}
       variant="ghost"
       size="icon"
-      className="text-muted-foreground size-7 hover:bg-transparent"
+      className="size-7 text-muted-foreground hover:bg-transparent"
     >
-      <IconGripVertical className="text-muted-foreground size-3" />
+      <IconGripVertical className="size-3 text-muted-foreground" />
       <span className="sr-only">Drag to reorder</span>
     </Button>
   )
@@ -176,7 +176,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     header: 'Section Type',
     cell: ({ row }) => (
       <div className="w-32">
-        <Badge variant="outline" className="text-muted-foreground px-1.5">
+        <Badge variant="outline" className="px-1.5 text-muted-foreground">
           {row.original.type}
         </Badge>
       </div>
@@ -186,7 +186,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     accessorKey: 'status',
     header: 'Status',
     cell: ({ row }) => (
-      <Badge variant="outline" className="text-muted-foreground px-1.5">
+      <Badge variant="outline" className="px-1.5 text-muted-foreground">
         {row.original.status === 'Done' ? (
           <IconCircleCheckFilled className="fill-green-500 dark:fill-green-400" />
         ) : (
@@ -214,7 +214,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
           Target
         </Label>
         <Input
-          className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent text-right shadow-none focus-visible:border dark:bg-transparent"
+          className="h-8 w-16 border-transparent bg-transparent text-right shadow-none hover:bg-input/30 focus-visible:border focus-visible:bg-background dark:bg-transparent dark:focus-visible:bg-input/30 dark:hover:bg-input/30"
           defaultValue={row.original.target}
           id={`${row.original.id}-target`}
         />
@@ -239,7 +239,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
           Limit
         </Label>
         <Input
-          className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent text-right shadow-none focus-visible:border dark:bg-transparent"
+          className="h-8 w-16 border-transparent bg-transparent text-right shadow-none hover:bg-input/30 focus-visible:border focus-visible:bg-background dark:bg-transparent dark:focus-visible:bg-input/30 dark:hover:bg-input/30"
           defaultValue={row.original.limit}
           id={`${row.original.id}-limit`}
         />
@@ -287,7 +287,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+            className="flex size-8 text-muted-foreground data-[state=open]:bg-muted"
             size="icon"
           >
             <IconDotsVertical />
@@ -407,7 +407,7 @@ export function DataTable({
         </Label>
         <Select defaultValue="outline">
           <SelectTrigger
-            className="flex w-fit @4xl/main:hidden"
+            className="flex @4xl/main:hidden w-fit"
             size="sm"
             id="view-selector"
           >
@@ -420,7 +420,7 @@ export function DataTable({
             <SelectItem value="focus-documents">Focus Documents</SelectItem>
           </SelectContent>
         </Select>
-        <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
+        <TabsList className="@4xl/main:flex hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:bg-muted-foreground/30 **:data-[slot=badge]:px-1">
           <TabsTrigger value="outline">Outline</TabsTrigger>
           <TabsTrigger value="past-performance">
             Past Performance <Badge variant="secondary">3</Badge>
@@ -483,7 +483,7 @@ export function DataTable({
             id={sortableId}
           >
             <Table>
-              <TableHeader className="bg-muted sticky top-0 z-10">
+              <TableHeader className="sticky top-0 z-10 bg-muted">
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
@@ -526,13 +526,13 @@ export function DataTable({
           </DndContext>
         </div>
         <div className="flex items-center justify-between px-4">
-          <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
+          <div className="hidden flex-1 text-muted-foreground text-sm lg:flex">
             {table.getFilteredSelectedRowModel().rows.length} of{' '}
             {table.getFilteredRowModel().rows.length} row(s) selected.
           </div>
           <div className="flex w-full items-center gap-8 lg:w-fit">
             <div className="hidden items-center gap-2 lg:flex">
-              <Label htmlFor="rows-per-page" className="text-sm font-medium">
+              <Label htmlFor="rows-per-page" className="font-medium text-sm">
                 Rows per page
               </Label>
               <Select
@@ -555,7 +555,7 @@ export function DataTable({
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex w-fit items-center justify-center text-sm font-medium">
+            <div className="flex w-fit items-center justify-center font-medium text-sm">
               Page {table.getState().pagination.pageIndex + 1} of{' '}
               {table.getPageCount()}
             </div>
@@ -648,7 +648,7 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
   return (
     <Drawer direction={isMobile ? 'bottom' : 'right'}>
       <DrawerTrigger asChild>
-        <Button variant="link" className="text-foreground w-fit px-0 text-left">
+        <Button variant="link" className="w-fit px-0 text-left text-foreground">
           {item.header}
         </Button>
       </DrawerTrigger>
@@ -704,7 +704,7 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
               </ChartContainer>
               <Separator />
               <div className="grid gap-2">
-                <div className="flex gap-2 leading-none font-medium">
+                <div className="flex gap-2 font-medium leading-none">
                   Trending up by 5.2% this month{' '}
                   <IconTrendingUp className="size-4" />
                 </div>

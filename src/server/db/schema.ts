@@ -3,7 +3,7 @@
 
 import { sql } from 'drizzle-orm'
 import { index, pgTableCreator } from 'drizzle-orm/pg-core'
-import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core'
+import { boolean, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same

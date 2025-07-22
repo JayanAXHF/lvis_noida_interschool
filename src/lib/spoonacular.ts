@@ -12,6 +12,31 @@ export interface MissedIngredient {
   unitShort: string
 }
 
+export interface AnalyzedInstruction {
+  name: string
+  steps: Step[]
+}
+
+export interface Step {
+  number: number
+  step: string
+  ingredients: MissedIngredient[]
+  equipment: Equipment[]
+  length?: Length
+}
+
+export interface Equipment {
+  id: number
+  name: string
+  localizedName: string
+  image: string
+}
+
+export interface Length {
+  number: number
+  unit: string
+}
+
 export interface Recipe {
   id: number
   image: string
@@ -19,6 +44,10 @@ export interface Recipe {
   likes: number
   missedIngredientCount: number
   missedIngredients: MissedIngredient[]
+  title: string
+  summary?: string
+  extendedIngredients?: MissedIngredient[]
+  analyzedInstructions?: AnalyzedInstruction[]
 }
 
 export interface SpoonacularApi {
@@ -35,16 +64,31 @@ export class SpoonacularClient implements SpoonacularApi {
   async getRecipes(ingredients: string[]): Promise<Recipe[]> {
     const ingredients_params = ingredients
       .map((ingredient, i) => {
-			if (i === 0) {
-				return `ingredients=${ingredient}`
-			} return `+${ingredient}`
-		})
+        if (i === 0) {
+          return `ingredients=${ingredient}`
+        }
+        return `+${ingredient}`
+      })
       .join(',')
     const response = await fetch(
       `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${this.apiKey}&${ingredients_params}`,
     )
-    const data = await response.json()
-		console.debug(data)
+    const data: Recipe[] = await response.json()
+
+    const detailedRecipes: Recipe[] = []
+    for (const recipe of data) {
+      const detailedRecipe = await this.getRecipeInformation(recipe.id)
+      detailedRecipes.push(detailedRecipe)
+    }
+
+    return detailedRecipes
+  }
+
+  async getRecipeInformation(id: number): Promise<Recipe> {
+    const response = await fetch(
+      `https://api.spoonacular.com/recipes/${id}/information?apiKey=${this.apiKey}`,
+    )
+    const data: Recipe = await response.json()
     return data
   }
 }

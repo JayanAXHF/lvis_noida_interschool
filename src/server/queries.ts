@@ -1,13 +1,13 @@
 'use server'
+import { eq } from 'drizzle-orm'
+import { headers } from 'next/headers'
+import { auth } from '~/lib/auth'
+import { getSession, useSession } from '~/lib/auth-client'
 import { db } from './db'
 import {
   messages as messagesSchema,
   threads as threadsSchema,
 } from './db/schema'
-import { auth } from '~/lib/auth'
-import { eq } from 'drizzle-orm'
-import { getSession, useSession } from '~/lib/auth-client'
-import { headers } from 'next/headers'
 
 export const getUserThreads = async (userId: string) => {
   try {

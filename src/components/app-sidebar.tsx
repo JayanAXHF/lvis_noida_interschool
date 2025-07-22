@@ -1,7 +1,5 @@
 'use client'
 
-import * as React from 'react'
-import { useQuery } from '@tanstack/react-query'
 import {
   IconBowl,
   IconBrain,
@@ -25,7 +23,10 @@ import {
   IconSettings,
   IconUsers,
 } from '@tabler/icons-react'
+import { useQuery } from '@tanstack/react-query'
+import * as React from 'react'
 
+import { atom, useAtom } from 'jotai'
 import { NavDocuments } from '~/components/nav-documents'
 import { NavMain } from '~/components/nav-main'
 import { NavSecondary } from '~/components/nav-secondary'
@@ -39,10 +40,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '~/components/ui/sidebar'
-import { getUserThreads } from '~/server/queries'
 import { useSession } from '~/lib/auth-client'
-import { atom, useAtom } from 'jotai'
-import { PageData, type NavMainChild } from '~/lib/data-interface'
+import { type NavMainChild, PageData } from '~/lib/data-interface'
+import { getUserThreads } from '~/server/queries'
 
 export const threadsAtom = atom<NavMainChild[]>()
 
@@ -192,7 +192,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <a href="#">
                 <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">
+                <span className="font-semibold text-base">
                   Lotus Valley GGN
                 </span>
               </a>

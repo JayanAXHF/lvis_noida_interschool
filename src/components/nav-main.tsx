@@ -1,15 +1,27 @@
 'use client'
 
-import { IconCirclePlusFilled, IconMail, type Icon } from '@tabler/icons-react'
+import { DialogClose } from '@radix-ui/react-dialog'
+import { type Icon, IconCirclePlusFilled, IconMail } from '@tabler/icons-react'
+import { useAtom } from 'jotai'
+import { ChevronRight, type LucideIcon } from 'lucide-react'
 import Link from 'next/link'
+import { useState } from 'react'
+import { currentThreadAtom } from '~/app/page'
+import { Button } from '~/components/ui/button'
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '~/components/ui/collapsible'
-import { Button } from '~/components/ui/button'
-import { ChevronRight, type LucideIcon } from 'lucide-react'
-import { threadsAtom } from './app-sidebar'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '~/components/ui/dialog'
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -20,23 +32,11 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '~/components/ui/sidebar'
-import { SidebarGroupContent } from './ui/sidebar'
-import { currentThreadAtom } from '~/app/page'
-import { useAtom } from 'jotai'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '~/components/ui/dialog'
-import { Input } from './ui/input'
-import { useState } from 'react'
-import { addThread } from '~/server/queries'
 import { useSession } from '~/lib/auth-client'
-import { DialogClose } from '@radix-ui/react-dialog'
+import { addThread } from '~/server/queries'
+import { threadsAtom } from './app-sidebar'
+import { Input } from './ui/input'
+import { SidebarGroupContent } from './ui/sidebar'
 
 export function NavMain({
   items,
@@ -67,7 +67,7 @@ export function NavMain({
               <DialogTrigger className="w-full">
                 <SidebarMenuButton
                   tooltip="Create new Chat"
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
+                  className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
                 >
                   <IconCirclePlusFilled />
                   <span>Create new Chat</span>
