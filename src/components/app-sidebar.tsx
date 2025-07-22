@@ -84,7 +84,7 @@ const getData = (threads) => {
       },
       {
         title: 'Self-help',
-        url: '#',
+        url: '/self-help',
         icon: IconInfoHexagon,
       },
     ],
